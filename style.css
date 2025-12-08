@@ -220,3 +220,33 @@ body {
     border-radius: 6px;
     font-family: inherit;
 }
+/* --- EDIÇÃO DE STATUS --- */
+.stat-values {
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+.editable-num {
+    cursor: pointer;
+    border-bottom: 1px dashed #aaa; /* Linha pontilhada para indicar edição */
+    padding: 0 2px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.editable-num:hover {
+    color: var(--color-power);
+    border-bottom-color: var(--color-power);
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* Estilo do Input que aparece quando clica */
+.input-edit-stat {
+    width: 60px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    padding: 2px;
+    border: 1px solid var(--color-padrao);
+    border-radius: 4px;
+    text-align: center;
+}

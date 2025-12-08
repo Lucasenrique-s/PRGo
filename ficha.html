@@ -11,7 +11,13 @@
 
     <div class="layout-container">
         
-        <aside class="sidebar">
+        <aside class="sidebar" style="position: relative;">
+            
+            <i id="btnEditarFicha" class="fas fa-cog" 
+               style="position: absolute; top: 20px; right: 20px; color: #aaa; cursor: pointer; font-size: 1.2rem; transition: 0.3s;">
+            </i>
+            <style> #btnEditarFicha:hover { color: var(--primary) !important; transform: rotate(90deg); } </style>
+
             <div class="profile-header">
                 <div class="avatar-circle">
                     <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Felix" alt="Avatar">
@@ -25,7 +31,9 @@
             <div class="bar-group bar-hp">
                 <div class="bar-label">
                     <span>❤️ Vida</span>
-                    <span id="txtHp">0 / 0</span>
+                    <div class="stat-values">
+                        <span id="valHp" class="editable-num">0</span> / <span id="maxHp">0</span>
+                    </div>
                 </div>
                 <div class="progress-track">
                     <div class="progress-fill" id="fillHp" style="width: 50%;"></div>
@@ -35,7 +43,9 @@
             <div class="bar-group bar-en">
                 <div class="bar-label">
                     <span>⚡ Pontos de Poder</span>
-                    <span id="txtPp">0 / 0</span>
+                    <div class="stat-values">
+                        <span id="valPp" class="editable-num">0</span> / <span id="maxPp">0</span>
+                    </div>
                 </div>
                 <div class="progress-track">
                     <div class="progress-fill" id="fillPp" style="width: 80%;"></div>
@@ -97,7 +107,8 @@
         </main>
 
         <div id="modalAcao" class="modal-overlay" style="display: none;">
-            <div class="modal-box"> <h2>Nova Ação</h2>
+            <div class="modal-box"> 
+                <h2>Nova Ação</h2>
         
                 <label>Nome da Ação</label>
                 <input type="text" id="newActionName" placeholder="Ex: Soco Meteoro">
@@ -127,6 +138,40 @@
                 </div>
             </div>
         </div>
+
+        <div id="modalFicha" class="modal-overlay" style="display: none;">
+            <div class="modal-box">
+                <h2>Editar Atributos</h2>
+                <p style="font-size: 0.8rem; color: #666; margin-bottom: 15px;">Ajuste seus limites e atributos base.</p>
+                
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label>Vida Máxima</label>
+                        <input type="number" id="editHpMax">
+                    </div>
+                    <div style="flex: 1;">
+                        <label>PP Máximo</label>
+                        <input type="number" id="editPpMax">
+                    </div>
+                </div>
+
+                <label style="margin-top: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Atributos</label>
+                <div class="grid-atributos" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
+                    <div><label style="font-size: 0.7rem;">FOR</label><input type="number" id="editFor"></div>
+                    <div><label style="font-size: 0.7rem;">DES</label><input type="number" id="editDes"></div>
+                    <div><label style="font-size: 0.7rem;">CON</label><input type="number" id="editCon"></div>
+                    <div><label style="font-size: 0.7rem;">INT</label><input type="number" id="editSab"></div>
+                    <div><label style="font-size: 0.7rem;">VON</label><input type="number" id="editVon"></div>
+                    <div><label style="font-size: 0.7rem;">PRE</label><input type="number" id="editPre"></div>
+                </div>
+
+                <div style="margin-top: 20px; text-align: right;">
+                    <button id="btnFecharFicha" style="background: #ccc; color: black; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">Cancelar</button>
+                    <button id="btnSalvarFicha" style="margin-left: 10px; background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">Salvar</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script type="module" src="ficha.js"></script>
