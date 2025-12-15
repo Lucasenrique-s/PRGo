@@ -394,6 +394,266 @@ body {
     max-height: 80vh; 
     overflow-y: auto;
 }
+/* --- DASHBOARD (LAYOUT ESBOÇO + DESIGN PREMIUM) --- */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    width: 100%;
+}
+
+.dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee; /* Linha bem suave */
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+}
+.dash-header h1 { color: #2c3e50; font-size: 1.8rem; font-weight: 700; }
+
+/* === 1. GRID DE MESAS (TOPO) === */
+.recent-rooms {
+    min-height: 250px;
+    width: 100%;
+}
+
+.rooms-grid {
+    display: grid;
+    /* Cards responsivos */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+/* Card da Mesa (Visual Clean) */
+.room-card-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border-left: 5px solid var(--primary); /* Identidade visual */
+    position: relative;
+    top: 0;
+}
+.room-card-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    border-color: var(--primary); /* Borda escurece no hover */
+}
+.room-card-item h3 { font-size: 1.2rem; color: #2c3e50; margin-bottom: 5px; }
+
+/* Estado Vazio */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    background: #f8f9fa; /* Cinza bem clarinho */
+    border: 2px dashed #ddd;
+    border-radius: 12px;
+    color: #999;
+}
+.empty-state i { font-size: 3rem; margin-bottom: 15px; display: block; opacity: 0.5; }
+
+/* Divisória Sutil */
+.divider-dashed {
+    border-top: 1px solid #eee;
+    margin: 50px 0;
+    width: 100%;
+}
+
+/* === 2. AÇÕES (BAIXO) === */
+.dash-actions {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr; /* Mobile: 1 coluna */
+}
+
+/* Design dos Cards de Ação (CLEAN) */
+.dash-card {
+    background: white;
+    padding: 40px;
+    border: 1px solid #e0e0e0; /* Borda fina */
+    border-radius: 12px; /* Curvatura padrão */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
+    transition: all 0.3s ease;
+    position: relative; /* Para o hover funcionar */
+    top: 0;
+}
+
+/* O HOVER CORRETO: Borda escura no CARD, não no botão */
+.dash-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary); /* A borda fica Marrom Escura */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card-icon { 
+    font-size: 3rem; 
+    color: var(--primary); /* Marrom */
+    margin-bottom: 15px;
+}
+
+.dash-card h3 { 
+    font-size: 1.4rem; 
+    margin-bottom: 8px; 
+    color: #2c3e50; 
+    font-weight: 700;
+}
+.dash-card p { color: #7f8c8d; margin-bottom: 25px; font-size: 0.95rem; }
+
+/* Botões Estilo "Foundry/Premium" (Escuros e Sólidos) */
+.action-btn, .action-btn-secondary {
+    width: 100%;
+    /* Preencher a parte inferior? Vamos aumentar o width maximo */
+    max-width: 300px; 
+    padding: 14px;
+    border-radius: 8px; /* Curvatura consistente com o card */
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    /* Cor Marrom Sólida */
+    background: var(--primary); 
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Hover do Botão: Apenas escurece o fundo */
+.action-btn:hover, .action-btn-secondary:hover { 
+    background: #3e2817; 
+}
+
+/* Grupo de Input + Botão (Lado a Lado) */
+.join-input-group { 
+    display: flex; 
+    gap: 10px; 
+    width: 100%; 
+    max-width: 400px; /* Mais largo pra caber código e botão */
+}
+
+.join-input-group input {
+    flex: 2; /* Ocupa mais espaço */
+    padding: 14px; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; /* Mesma curvatura do botão */
+    text-align: center; 
+    font-weight: bold; 
+    text-transform: uppercase;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+.join-input-group input:focus { border-color: var(--primary); }
+
+.join-input-group button {
+    flex: 1; /* Ocupa menos espaço */
+    margin-top: 0; /* Remove margem extra */
+}
+
+/* Botão Sair (Pequeno) */
+.btn-small { 
+    padding: 8px 16px; background: #eee; border: none; 
+    border-radius: 6px; cursor: pointer; font-weight: 600; color: #555; 
+}
+.btn-small:hover { background: #ddd; color: #000; }
+
+/* PC: Lado a Lado (50% / 50%) */
+@media (min-width: 768px) {
+    .dash-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Estado Vazio */
+.empty-state {
+    grid-column: 1 / -1; /* Ocupa a linha toda */
+    text-align: center;
+    padding: 60px;
+    background: #f8f9fa;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    color: #999;
+}
+.empty-state i { font-size: 3rem; margin-bottom: 15px; display: block; opacity: 0.5; }
+
+/* === DIVISÓRIA === */
+.divider-dashed {
+    border-top: 2px dashed #ddd;
+    margin: 50px 0;
+    width: 100%;
+}
+
+/* === 2. AÇÕES (BAIXO) === */
+.dash-actions {
+    display: grid;
+    gap: 30px;
+    /* Mobile: 1 coluna | Desktop: 2 colunas iguais */
+    grid-template-columns: 1fr; 
+}
+
+/* Design dos Cards de Ação */
+.dash-card {
+    background: white;
+    padding: 40px;
+    border: 2px solid #2c3e50; /* Borda grossa estilo desenho */
+    border-radius: 16px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.1); /* Sombra dura estilo cartoon */
+}
+
+.card-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+.dash-card h3 { font-size: 1.5rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Botões Grandes */
+.action-btn, .action-btn-secondary {
+    width: 100%;
+    max-width: 250px;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 50px; /* Redondinho */
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.action-btn { background: var(--primary); color: white; border: 2px solid var(--primary); }
+.action-btn:hover { background: #3e2817; }
+
+.action-btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
+.action-btn-secondary:hover { background: #fdfdfd; transform: scale(1.05); }
+
+/* Input de Código */
+.join-input-group { 
+    display: flex; gap: 10px; width: 100%; max-width: 300px; margin-top: 15px; 
+}
+.join-input-group input {
+    flex: 1; padding: 10px; border: 2px solid #ccc; border-radius: 8px; 
+    text-align: center; font-weight: bold; text-transform: uppercase;
+}
+
+/* MEDIA QUERY: ATIVA O GRID LADO A LADO NO PC */
+@media (min-width: 768px) {
+    .dash-actions {
+        grid-template-columns: 1fr 1fr; /* 50% - 50% */
+    }
+}
 
 /* (Mantenha o resto do CSS dos botões e grid igual estava) */
 .dice-grid-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }

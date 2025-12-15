@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Suas Mesas | OPRPG</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <header class="dash-header">
+            <h1>Painel do Usuário</h1>
+            <button id="btnSair" class="btn-small">Sair</button>
+        </header>
+
+        <section class="recent-rooms">
+            <h3 style="margin-bottom: 20px; color: #555;">Suas Mesas Ativas</h3>
+            
+            <div id="listaMesas" class="rooms-grid">
+                <div class="empty-state">
+                    <i class="fas fa-wind"></i>
+                    <p>Nenhuma mesa encontrada.<br>O vento sopra vazio por aqui.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider-dashed"></div>
+
+        <section class="dash-actions">
+            
+            <div class="dash-card create-room">
+                <div class="card-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <h3>CRIAR MESA</h3>
+                <p>Torne-se o Narrador e crie um novo mundo.</p>
+                <button id="btnCriarMesa" class="action-btn">Criar Mesa</button>
+            </div>
+
+            <div class="dash-card join-room">
+                <div class="card-icon"><i class="fas fa-ship"></i></div>
+                <h3>ENTRAR EM MESA</h3>
+                <p>Tem um código de convite?</p>
+                <div class="join-input-group">
+                    <input type="text" id="inputCodigoSala" placeholder="Código">
+                    <button id="btnEntrarMesa" class="action-btn-secondary">Entrar</button>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <script type="module" src="dashboard.js"></script>
+</body>
+</html>
