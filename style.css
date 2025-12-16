@@ -313,7 +313,7 @@ body {
 
 /* 2. LATERAIS (Esquerda/Direita) */
 .dice-tray.dock-side {
-    top: 50%; /* Posição inicial, o JS vai mudar */
+    /* top: 50%;  REMOVIDO: Deixa o JS controlar a posição vertical */
     border-radius: 12px;
 }
 
