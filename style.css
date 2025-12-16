@@ -14,6 +14,81 @@
     --color-react: #2ecc71;  /* Verde */
 }
 
+/* --- DARK MODE --- */
+body.dark-mode {
+    color-scheme: dark; /* Ativa scrollbar nativa escura */
+    --bg-page: #121212;
+    --bg-card: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-sec: #a0a0a0;
+    --primary: #8d5b36; /* Marrom mais claro para contraste */
+}
+
+/* Ajustes específicos para Dark Mode */
+body.dark-mode .attr-card {
+    background: #2d2d2d;
+    border-color: #333;
+}
+body.dark-mode .action-card {
+    background: #252525;
+    border-color: #333;
+}
+body.dark-mode .dice-tray {
+    background: #1e1e1e;
+    border-color: #333;
+}
+body.dark-mode .tray-body {
+    background: #121212;
+}
+body.dark-mode .dice-btn {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #ccc;
+}
+body.dark-mode .dice-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+body.dark-mode .tray-footer input {
+    background: #2d2d2d;
+    color: white;
+    border-color: #444;
+}
+body.dark-mode .clear-btn {
+    background: #333;
+    color: #ccc;
+}
+body.dark-mode .modal-box {
+    background: #1e1e1e;
+    color: #e0e0e0;
+}
+body.dark-mode .modal-box input, 
+body.dark-mode .modal-box textarea, 
+body.dark-mode .modal-box select {
+    background: #2d2d2d;
+    color: white;
+    border-color: #444;
+}
+body.dark-mode .tab.active {
+    background: #2d2d2d;
+    color: var(--color-power);
+}
+body.dark-mode hr {
+    border-color: #333 !important;
+}
+body.dark-mode .progress-track {
+    background: #333;
+}
+body.dark-mode .tray-result-box {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+body.dark-mode #btnSair {
+    background: #333 !important;
+    color: #e0e0e0;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {

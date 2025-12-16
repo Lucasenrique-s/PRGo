@@ -27,10 +27,39 @@ onAuthStateChanged(auth, (user) => {
         // Inicializa a lógica da bandeja passando o user para salvar rolagem
         configurarEdicao('valNivel', 'nivel', 'null', user.uid);
         iniciarBandejaDados(user);
+        configurarTema(); // <--- INICIA O TEMA
     } else {
         window.location.href = "index.html";
     }
 });
+
+// --- SISTEMA DE TEMA (DARK MODE) ---
+function configurarTema() {
+    const btnTheme = document.getElementById('btnToggleTheme');
+    const body = document.body;
+    
+    // 1. Verifica preferência salva
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-mode');
+        btnTheme.className = "fas fa-sun";
+    }
+
+    // 2. Alternar Tema
+    if(btnTheme) {
+        btnTheme.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                btnTheme.className = "fas fa-sun";
+            } else {
+                localStorage.setItem('theme', 'light');
+                btnTheme.className = "fas fa-moon";
+            }
+        });
+    }
+}
 
 function carregarFicha(uid) {
     const fichaRef = ref(db, 'users/' + uid);

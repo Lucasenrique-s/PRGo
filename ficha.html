@@ -8,14 +8,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <script>
+        // Aplica o tema antes de carregar o conteúdo visual para evitar "piscar"
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
 
     <div class="layout-container">
         
         <aside class="sidebar" style="position: relative;">
-            <i id="btnEditarFicha" class="fas fa-cog" 
-               style="position: absolute; top: 20px; right: 20px; color: #aaa; cursor: pointer; font-size: 1.2rem; transition: 0.3s;">
-            </i>
-            <style> #btnEditarFicha:hover { color: var(--primary) !important; transform: rotate(90deg); } </style>
+            <div style="position: absolute; top: 20px; right: 20px; display: flex; gap: 10px;">
+                <i id="btnToggleTheme" class="fas fa-moon" 
+                   style="color: #aaa; cursor: pointer; font-size: 1.2rem; transition: 0.3s;">
+                </i>
+                <i id="btnEditarFicha" class="fas fa-cog" 
+                   style="color: #aaa; cursor: pointer; font-size: 1.2rem; transition: 0.3s;">
+                </i>
+            </div>
+            <style> 
+                #btnEditarFicha:hover { color: var(--primary) !important; transform: rotate(90deg); } 
+                #btnToggleTheme:hover { color: var(--color-bonus) !important; transform: scale(1.1); }
+            </style>
 
             <div class="profile-header">
                 <div class="avatar-circle">
