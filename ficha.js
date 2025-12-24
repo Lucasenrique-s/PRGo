@@ -31,7 +31,7 @@ onAuthStateChanged(auth, (user) => {
         // Inicializa a lógica da bandeja passando o user para salvar rolagem
         configurarEdicao('valNivel', 'nivel', 'null', user.uid);
         iniciarBandejaDados(user);
-        configurarTema(); // <--- INICIA O TEMA
+        configurarTema();
     } else {
         window.location.href = "index.html";
     }
@@ -294,12 +294,10 @@ function iniciarBandejaDados(user) {
     header.addEventListener('mousedown', (e) => {
         isDragging = true;
         hasMoved = false;
-        dragStartTime = Date.now(); // Marca o tempo de início
+        dragStartTime = Date.now();
         startX = e.clientX;
         startY = e.clientY;
         
-        // Captura posição inicial mas NÃO altera estilos ainda
-        // Isso evita que um clique simples quebre a ancoragem (right: 0)
         const rect = tray.getBoundingClientRect();
         initialLeft = rect.left;
         initialTop = rect.top;
@@ -325,13 +323,10 @@ function iniciarBandejaDados(user) {
             tray.classList.remove('dock-bottom', 'dock-side');
             
             if (isCollapsed) {
-                // SE ERA BOLINHA: Mantém bolinha e centraliza no mouse
                 tray.style.transition = 'width 0.3s ease, height 0.3s ease, border-radius 0.3s ease';
                 icon.className = "fas fa-dice-d20"; 
             } else {
-                // SE ESTAVA ABERTO: Mantém aberto e segue o mouse com o offset original
                 tray.style.transition = 'none'; 
-                // Não centraliza, usa o ponto onde clicou no header
             }
 
             // Aplica posição inicial corrigida
@@ -368,7 +363,7 @@ function iniciarBandejaDados(user) {
         }
     });
 
-    // --- SOLTAR (MOUSEUP) - AQUI ACONTECE A MÁGICA DO GRUDE ---
+    // --- SOLTAR (MOUSEUP) ---
     document.addEventListener('mouseup', () => {
         if (!isDragging) return;
         isDragging = false;
@@ -400,19 +395,14 @@ function iniciarBandejaDados(user) {
         // Limpa classes antigas
         tray.classList.remove('dock-bottom', 'dock-side');
         
-        // IMPORTANTE: Remove 'collapsed' para abrir ao soltar
-        // tray.classList.remove('collapsed'); // REMOVIDO: Agora controlamos isso por caso
-
         if (distBottom < snapThreshold) {
-            // GRUDA EM BAIXO (Modo Barra)
+            // GRUDA EM BAIXO
             tray.classList.add('dock-bottom');
-            tray.classList.add('collapsed'); // FECHA AO GRUDAR EM BAIXO
+            tray.classList.add('collapsed');
             
-            // ANIMAÇÃO DE DESCIDA
             const collapsedHeight = 45; 
             const targetTop = windowHeight - collapsedHeight;
             
-            // Define posição inicial da animação (onde ele vai cair)
             tray.style.bottom = 'auto'; 
             tray.style.top = `${targetTop}px`;
             tray.style.left = `${Math.max(0, Math.min(rect.left, windowWidth - 300))}px`;
@@ -429,9 +419,9 @@ function iniciarBandejaDados(user) {
             }, 300);
 
         } else if (distLeft < snapThreshold) {
-            // GRUDA NA ESQUERDA
+            // GRUDA ESQUERDA
             tray.classList.add('dock-side');
-            tray.classList.add('collapsed'); // VIRA BOLINHA NA ESQUERDA
+            tray.classList.add('collapsed');
             
             tray.style.right = 'auto';
             tray.style.left = '0'; 
@@ -444,9 +434,9 @@ function iniciarBandejaDados(user) {
             icon.className = "fas fa-dice-d20";
 
         } else if (distRight < snapThreshold) {
-            // GRUDA NA DIREITA
+            // GRUDA DIREITA
             tray.classList.add('dock-side');
-            tray.classList.add('collapsed'); // VIRA BOLINHA NA DIREITA
+            tray.classList.add('collapsed');
             
             tray.style.left = 'auto';
             tray.style.right = '0'; 
@@ -458,10 +448,9 @@ function iniciarBandejaDados(user) {
             icon.className = "fas fa-dice-d20";
 
         } else {
-            // FLUTUANDO (Sem dock)
-            // Mantém o estado anterior (se estava fechado, continua. Se aberto, continua).
+            // FLUTUANDO
             
-            // 1. Ajusta Horizontal (Left)
+            // Ajusta Horizontal
             let finalLeft = rect.left;
             if (finalLeft + 300 > windowWidth) {
                 finalLeft = windowWidth - 300 - safeMargin;
@@ -469,15 +458,13 @@ function iniciarBandejaDados(user) {
             tray.style.left = `${Math.max(safeMargin, finalLeft)}px`;
             tray.style.right = 'auto';
 
-            // 2. Ajusta Vertical (Top/Bottom)
-            // Se estiver muito em baixo, expande pra CIMA
+            // Ajusta Vertical
+            // Expande pra CIMA se necessário
             if (rect.top + estimatedHeight > windowHeight) {
-                // Expande pra cima: Fixa Bottom
                 const bottomPos = windowHeight - rect.bottom;
                 tray.style.bottom = `${Math.max(safeMargin, bottomPos)}px`;
                 tray.style.top = 'auto';
             } else {
-                // Expande pra baixo: Fixa Top
                 tray.style.top = `${rect.top}px`;
                 tray.style.bottom = 'auto';
             }
@@ -491,9 +478,9 @@ function iniciarBandejaDados(user) {
         }
     }
 
-    // --- CLIQUE NO HEADER (ABRIR/FECHAR) ---
+    // --- CLIQUE (ABRIR/FECHAR) ---
     header.addEventListener('click', () => {
-        // Só abre/fecha se NÃO moveu E se foi um clique rápido (< 200ms)
+        // Clique rápido sem arrastar
         const clickDuration = Date.now() - dragStartTime;
         
         if (!hasMoved && clickDuration < 200) {
@@ -502,12 +489,12 @@ function iniciarBandejaDados(user) {
             const trayBody = tray.querySelector('.tray-body');
 
             if (willOpen) {
-                // --- ABRINDO (Animação FLIP) ---
+                // --- ABRINDO ---
                 const rect = tray.getBoundingClientRect();
                 const startHeight = tray.offsetHeight;
                 const startWidth = tray.offsetWidth;
                 
-                // Prepara para medir o tamanho final (sem animação)
+                // Mede tamanho final
                 tray.style.transition = 'none';
                 tray.classList.remove('collapsed');
                 tray.style.height = 'auto';
@@ -517,14 +504,14 @@ function iniciarBandejaDados(user) {
                 
                 const targetHeight = tray.scrollHeight;
                 
-                // LÓGICA DE POSICIONAMENTO (Smart Expansion)
+                // Posicionamento Inteligente
                 const windowHeight = window.innerHeight;
                 const windowWidth = window.innerWidth;
                 
                 const spaceBelow = windowHeight - rect.top;
                 const spaceAbove = rect.bottom; 
                 
-                // Se tiver pouco espaço em baixo (< 350px) e mais espaço em cima, expande pra CIMA
+                // Expande para cima se pouco espaço
                 if (spaceBelow < 350 && spaceAbove > spaceBelow) {
                     const bottomPos = windowHeight - rect.bottom;
                     tray.style.bottom = `${bottomPos}px`;
@@ -534,7 +521,7 @@ function iniciarBandejaDados(user) {
                     tray.style.bottom = 'auto';
                 }
 
-                // CORREÇÃO HORIZONTAL
+                // Correção Horizontal
                 if (isFloating) {
                     const expandedWidth = 300;
                     if (rect.left + expandedWidth > windowWidth) {
@@ -543,18 +530,17 @@ function iniciarBandejaDados(user) {
                     }
                 }
 
-                // Volta pro estado inicial para começar a animar
+                // Inicia animação
                 tray.style.height = `${startHeight}px`;
                 tray.style.width = `${startWidth}px`;
                 
                 tray.offsetHeight; // Força reflow
                 
-                // Ativa transição e vai pro final
                 tray.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
                 tray.style.height = `${targetHeight}px`;
                 tray.style.width = '300px';
 
-                // Limpa estilo inline após animação
+                // Limpa estilos
                 setTimeout(() => {
                     if (!tray.classList.contains('collapsed')) {
                         tray.style.height = 'auto';
@@ -576,7 +562,6 @@ function iniciarBandejaDados(user) {
                 tray.classList.add('collapsed');
                 tray.style.transition = 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
                 
-                // Define tamanho final
                 if (tray.classList.contains('dock-side')) {
                     tray.style.height = '50px';
                     tray.style.width = '50px';
@@ -585,7 +570,7 @@ function iniciarBandejaDados(user) {
                     tray.style.width = '300px';
                 }
 
-                // Limpa estilo inline
+                // Limpa estilos
                 setTimeout(() => {
                     if (tray.classList.contains('collapsed')) {
                         tray.style.height = '';
@@ -615,7 +600,7 @@ function iniciarBandejaDados(user) {
     });
 
     // =========================================================
-    // LÓGICA DE ROLAGEM (IGUAL À ANTERIOR)
+    // LÓGICA DE ROLAGEM
     // =========================================================
     const diceContainer = document.getElementById('diceContainer');
     const btnToggleSign = document.getElementById('btnToggleSign');
@@ -732,7 +717,7 @@ function iniciarBandejaDados(user) {
 // =========================================================
 
 function setupInventoryUI(uid) {
-    // --- ABAS ---
+    // ABAS
     const tabs = document.querySelectorAll('.tab');
     const views = {
         0: 'view-combate',
@@ -757,7 +742,7 @@ function setupInventoryUI(uid) {
         });
     });
 
-    // --- MODAL NOVO ITEM ---
+    // MODAL ITEM
     const btnNovoItem = document.getElementById('btnNovoItem');
     const modalItem = document.getElementById('modalItem');
     const btnFecharItem = document.getElementById('btnFecharModalItem');
@@ -766,7 +751,7 @@ function setupInventoryUI(uid) {
     const weaponFields = document.getElementById('weaponFields');
     const modalTitle = modalItem.querySelector('h2');
 
-    // Variável para controlar se estamos editando
+    // Controle de edição
     let editingItemId = null;
 
     if(selectType) {
@@ -779,11 +764,11 @@ function setupInventoryUI(uid) {
         });
     }
 
-    // Função para abrir modal (Novo ou Editar)
+    // Abrir Modal
     window.abrirModalItem = (item = null, id = null) => {
         modalItem.style.display = 'flex';
         if(item) {
-            // MODO EDIÇÃO
+            // Edição
             editingItemId = id;
             modalTitle.innerText = "Editar Item";
             document.getElementById('newItemName').value = item.nome;
@@ -800,7 +785,7 @@ function setupInventoryUI(uid) {
                 weaponFields.style.display = 'none';
             }
         } else {
-            // MODO NOVO
+            // Novo
             editingItemId = null;
             modalTitle.innerText = "Novo Item";
             document.getElementById('newItemName').value = "";
@@ -818,7 +803,7 @@ function setupInventoryUI(uid) {
     if(btnFecharItem) btnFecharItem.onclick = () => { modalItem.style.display = 'none'; };
 
     if(btnSalvarItem) {
-        // Remove listeners antigos para evitar duplicação se chamado múltiplas vezes
+        // Evita duplicação de listeners
         const novoBtn = btnSalvarItem.cloneNode(true);
         btnSalvarItem.parentNode.replaceChild(novoBtn, btnSalvarItem);
         
@@ -840,8 +825,8 @@ function setupInventoryUI(uid) {
                     descricao: desc, 
                     dano: tipo === 'arma' ? dano : '',
                     modificador: tipo === 'arma' ? Number(mod) : 0,
-                    // Mantém o estado de equipado se estiver editando, senão false
-                    equipado: editingItemId ? (/* será mantido pelo update */ undefined) : false 
+                    // Mantém estado equipado
+                    equipado: editingItemId ? undefined : false 
                 };
 
                 // Remove undefined keys
@@ -870,7 +855,6 @@ function carregarInventario(uid) {
         const max = snapshot.val() || 20;
         const elMax = document.getElementById('maxPeso');
         if(elMax) elMax.innerText = max;
-        // Recalcula barra se já tiver itens carregados (será feito no onValue do inventário também)
     });
     
     onValue(invRef, (snapshot) => {
@@ -895,7 +879,7 @@ function carregarInventario(uid) {
                     <div class="action-card type-comum collapsed expandable-card" data-id="${id}" style="border-left: 4px solid ${item.equipado ? 'var(--primary)' : '#ccc'}; position: relative;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div class="card-title" style="margin-bottom: 0;">${item.nome} ${item.equipado ? '<i class="fas fa-check-circle" style="color: var(--primary); margin-left: 5px;"></i>' : ''}</div>
-                            <div style="font-size: 0.8rem; color: var(--text-sec); font-weight: bold;">${item.peso} kg</div>
+                            <div style="font-size: 0.8rem; color: var(--text-sec); font-weight: bold;">${item.peso} PC</div>
                         </div>
                         ${item.tipo === 'arma' && item.dano ? `<div style="font-size: 0.85rem; color: var(--color-power); font-weight: bold; margin-top: 2px;">⚔️ ${item.dano} ${item.modificador ? (item.modificador > 0 ? `+${item.modificador}` : item.modificador) : ''}</div>` : ''}
                         <div class="card-desc" style="margin-top: 5px;">${item.descricao}</div>
@@ -913,20 +897,20 @@ function carregarInventario(uid) {
                 `;
 
                 if(item.equipado) {
-                    // Render in Slot
+                    // Renderiza no Slot
                     const slotHTML = `
                         <div style="width: 100%; padding: 10px;">
                             <div style="font-weight: bold; color: var(--primary); font-size: 1.1rem;">${item.nome}</div>
                             ${item.tipo === 'arma' && item.dano ? `<div style="font-size: 0.9rem; color: var(--color-power); font-weight: bold; margin: 5px 0;">⚔️ ${item.dano} ${item.modificador ? (item.modificador > 0 ? `+${item.modificador}` : item.modificador) : ''}</div>` : ''}
                             <div style="font-size: 0.8rem; color: var(--text-sec); margin-bottom: 5px;">${item.tags || ''}</div>
-                            <div style="font-size: 0.8rem; font-weight: bold; color: var(--text-main);">${item.peso} kg</div>
+                            <div style="font-size: 0.8rem; font-weight: bold; color: var(--text-main);">${item.peso} PC</div>
                             <button class="btn-equip" data-id="${id}" data-tipo="${item.tipo}" data-equipado="true" style="margin-top: 8px; font-size: 0.8rem; padding: 4px 12px; background: var(--bg-button); color: var(--text-button); border: none; border-radius: 4px; cursor: pointer;">Desequipar</button>
                         </div>
                     `;
                     if(item.tipo === 'arma') slotArma.innerHTML = slotHTML;
                     if(item.tipo === 'armadura') slotArmadura.innerHTML = slotHTML;
                 } else {
-                    // Render in Backpack
+                    // Renderiza na Mochila
                     lista.innerHTML += itemHTML;
                 }
             });
@@ -934,10 +918,10 @@ function carregarInventario(uid) {
         
         atualizarPeso(pesoTotal);
         
-        // Event Listeners for Buttons
+        // Listeners
         document.querySelectorAll('.btn-delete-item').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita expandir o card
+                e.stopPropagation();
                 if(confirm("Apagar este item?")) {
                     remove(ref(db, 'users/' + uid + '/inventario/' + e.target.getAttribute('data-id')));
                 }
@@ -946,7 +930,7 @@ function carregarInventario(uid) {
 
         document.querySelectorAll('.btn-edit-item').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita expandir o card
+                e.stopPropagation();
                 const id = e.target.getAttribute('data-id');
                 const item = itens[id];
                 window.abrirModalItem(item, id);
@@ -955,14 +939,13 @@ function carregarInventario(uid) {
 
         document.querySelectorAll('.btn-equip').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita expandir o card
+                e.stopPropagation();
                 const id = e.target.getAttribute('data-id');
                 const tipo = e.target.getAttribute('data-tipo');
                 const estaEquipado = e.target.getAttribute('data-equipado') === 'true';
                 
-                // Se for equipar, primeiro desequipa outros do mesmo tipo
+                // Desequipa outros do mesmo tipo
                 if(!estaEquipado) {
-                    // Encontra itens do mesmo tipo já equipados e desequipa
                     Object.entries(itens || {}).forEach(([k, v]) => {
                         if(v.tipo === tipo && v.equipado) {
                             update(ref(db, 'users/' + uid + '/inventario/' + k), { equipado: false });
@@ -974,7 +957,7 @@ function carregarInventario(uid) {
             });
         });
 
-        // Expand/Collapse Logic
+        // Expandir/Recolher
         document.querySelectorAll('.expandable-card').forEach(card => {
             card.addEventListener('click', () => {
                 card.classList.toggle('collapsed');
@@ -996,14 +979,25 @@ function atualizarPeso(pesoTotal) {
     const pct = (pesoTotal / maxPeso) * 100;
     elFillPeso.style.width = `${Math.min(100, pct)}%`;
     
-    if(pct > 100) {
+    // Cores Progressivas
+    if (pct >= 100) {
         elFillPeso.style.background = '#ff4444';
         msgSobrecarga.style.display = 'block';
+        msgSobrecarga.innerHTML = '<i class="fas fa-exclamation-triangle"></i> LIMITE ATINGIDO!';
     } else if (pct > 50) {
-        elFillPeso.style.background = 'orange';
+        // Sobrecarga
+        if (pct >= 90) elFillPeso.style.background = '#ff4444';
+        else if (pct >= 75) elFillPeso.style.background = 'orangered';
+        else elFillPeso.style.background = 'var(--color-power)';
+        
+        msgSobrecarga.style.display = 'block';
+        // TODO: Implementar penalidades mecânicas de sobrecarga futuramente
+        msgSobrecarga.innerHTML = '<i class="fas fa-weight-hanging"></i> SOBRECARGA';
+    } else if (pct >= 25) {
+        elFillPeso.style.background = 'var(--color-bonus)'; // Amarelo
         msgSobrecarga.style.display = 'none';
     } else {
-        elFillPeso.style.background = 'var(--color-bonus)'; 
+        elFillPeso.style.background = 'var(--color-react)'; // Verde
         msgSobrecarga.style.display = 'none';
     }
 }
