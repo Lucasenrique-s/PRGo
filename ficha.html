@@ -85,8 +85,9 @@
                 <div class="tab"><i class="fas fa-users"></i> Tripulação</div>
             </nav>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h1>Ações de Combate</h1>
+            <div id="view-combate" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1>Ações de Combate</h1>
                 <button id="btnNovaAcao" style="background: var(--color-power); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">+ Nova Ação</button>
             </div>
             <p style="color: #999; font-size: 0.9rem; margin-bottom: 20px;">Gerencie suas técnicas e ataques aqui.</p>
@@ -114,6 +115,43 @@
                 <h3>Reações</h3>
             </div>
             <div id="lista-react" class="action-grid"></div>
+            </div>
+
+            <div id="view-inventario" class="tab-content" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1>Inventário</h1>
+                    <button id="btnNovoItem" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">+ Novo Item</button>
+                </div>
+
+                <div class="bar-group" style="margin: 20px 0;">
+                    <div class="bar-label">
+                        <span>⚖️ Carga</span>
+                        <div class="stat-values">
+                            <span id="valPeso">0</span> / <span id="maxPeso" class="editable-num">20</span> kg
+                        </div>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="fillPeso" style="width: 0%; background: var(--color-bonus);"></div>
+                    </div>
+                    <div id="msgSobrecarga" style="color: red; font-size: 0.8rem; display: none; margin-top: 5px; font-weight: bold;"><i class="fas fa-exclamation-triangle"></i> SOBRECARGA!</div>
+                </div>
+
+                <div class="equipment-slots" style="display: flex; gap: 15px; margin-bottom: 30px;">
+                    <div class="equip-slot" id="slot-arma" style="flex: 1; background: var(--bg-slot); padding: 15px; border-radius: 10px; border: 2px dashed var(--border-slot); text-align: center; min-height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <i class="fas fa-fist-raised" style="font-size: 2rem; color: var(--text-sec); margin-bottom: 10px;"></i>
+                        <div style="font-weight: bold; color: var(--text-sec);">Arma Principal</div>
+                        <div class="slot-content" style="width: 100%;"></div>
+                    </div>
+                    <div class="equip-slot" id="slot-armadura" style="flex: 1; background: var(--bg-slot); padding: 15px; border-radius: 10px; border: 2px dashed var(--border-slot); text-align: center; min-height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--text-sec); margin-bottom: 10px;"></i>
+                        <div style="font-weight: bold; color: var(--text-sec);">Armadura</div>
+                        <div class="slot-content" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <h3>Mochila</h3>
+                <div id="lista-inventario" class="action-grid"></div>
+            </div>
         </main>
 
         <div id="modalAcao" class="modal-overlay" style="display: none;">
@@ -171,6 +209,51 @@
                 <div style="margin-top: 20px; text-align: right;">
                     <button id="btnFecharFicha" style="background: #ccc; color: black; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">Cancelar</button>
                     <button id="btnSalvarFicha" style="margin-left: 10px; background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">Salvar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modalItem" class="modal-overlay" style="display: none;">
+            <div class="modal-box">
+                <h2>Novo Item</h2>
+                <label>Nome do Item</label>
+                <input type="text" id="newItemName" placeholder="Ex: Espada Longa">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                    <div>
+                        <label>Peso (kg)</label>
+                        <input type="number" id="newItemWeight" step="0.1" value="1.0">
+                    </div>
+                    <div>
+                        <label>Tipo</label>
+                        <select id="newItemType" style="width: 100%; padding: 8px;">
+                            <option value="comum">Item Comum</option>
+                            <option value="arma">Arma</option>
+                            <option value="armadura">Armadura</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="weaponFields" style="display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                    <div>
+                        <label>Dano (ex: 1d8)</label>
+                        <input type="text" id="newItemDamage" placeholder="1d8">
+                    </div>
+                    <div>
+                        <label>Modificador (ex: +2)</label>
+                        <input type="number" id="newItemMod" placeholder="0">
+                    </div>
+                </div>
+
+                <label style="margin-top: 10px;">Tags (separadas por vírgula)</label>
+                <input type="text" id="newItemTags" placeholder="Ex: Cortante, Duas Mãos, Raro">
+
+                <label style="margin-top: 10px;">Descrição / Efeitos</label>
+                <textarea id="newItemDesc" placeholder="Descrição do item..." style="width: 100%; margin-top: 5px;"></textarea>
+
+                <div style="margin-top: 20px; text-align: right;">
+                    <button id="btnFecharModalItem" style="background: #ccc; color: black; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">Cancelar</button>
+                    <button id="btnSalvarItem" style="margin-left: 10px; background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">Salvar</button>
                 </div>
             </div>
         </div>
